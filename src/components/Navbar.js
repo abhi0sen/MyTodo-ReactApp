@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types' 
-
+import {Outlet, Link} from 'react-router-dom'
 
 let Navbar = (props) => {
     return (
       <div>
         <nav className="navbar navbar-expand-lg bg-body-tertiary p-3">
-          <a className="navbar-brand" href="/">
+          <Link className="navbar-brand" to="/">
             <span>{props.title}</span>
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -23,22 +23,20 @@ let Navbar = (props) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" href="/">Home</a>
+              <Link className="nav-link" to="/">Home</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/about-us/">About Us</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/contact-us/">Contact us</a>
+              <Link className="nav-link" to="/about-me/">About Us</Link>
             </li>
           </ul>
 
-          {props.searchBar? <form action="#">
+          {props.searchBar? <form action="/">
             <input type="text" className="me-2 p-1"/>
             <button type="button" className="btn btn-outline-dark"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>: ""}
           </div>
         </nav>
+        <Outlet />
       </div>
     );
   };

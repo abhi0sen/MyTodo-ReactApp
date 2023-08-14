@@ -1,20 +1,37 @@
-import './App.css';
 import Navbar from './components/Navbar';
 import Todos from './components/Todos';
 import Footer from './components/Footer';
 import AddTodo from './components/AddTodo';
 import React, { useState, useEffect } from 'react';
-// import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+// import ReactDOM from "react-dom/client";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import About from './components/About';
 
 function App() {
   let initTodo;
-  if(localStorage.getItem("todos")===null){
-    initTodo=[];
+  if(localStorage.getItem("todos") === null){
+    initTodo = [];
   }
   else{
-    initTodo=JSON.parse(localStorage.getItem("todos"));
+    initTodo = JSON.parse(localStorage.getItem("todos"));
   }
+  
+  const onDelete = (todo) =>{
+    console.log("I am deleted", todo);
+    setTodos(todos.filter((e)=>{
+      return e !== todo;
+    }));
+    localStorage.setItem("todos", JSON.stringify(todos))
+
+  }
+
+  // let initTodo;
+  // if(localStorage.getItem("todos")===null){
+  //   initTodo=[];
+  // }
+  // else{
+  //   initTodo=JSON.parse(localStorage.getItem("todos"));
+  // }
   
   const addTodo = (title, desc) =>{
     let sno;
@@ -32,39 +49,38 @@ function App() {
 
   setTodos([...todos, myTodo]);
   console.log(myTodo);
-
-  
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }
+  }    
 
 
-  const onDelete = (todo) =>{
-    console.log("I am deleted", todo);
-    setTodos(todos.filter((e)=>{
-      return e !== todo;
-    }));
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }
+  // updating the code with newer values
+  const [todos, setTodos] = useState(initTodo);
 
-
-  const [todos, setTodos] = useState([initTodo]);
-
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
+  // Saving the data in the localstorage to be saved even after Reloading the page
+  useEffect(()=>{
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos])
 
 
   return (
     <div>
+      <Router>
       <Navbar title = "MyTodoList" searchBar={false }/>
 
-      <AddTodo addTodo = {addTodo} />
-      <Todos todos={todos} onDelete={onDelete}/>
+      <Routes>
 
+        <Route path='/' element = {
 
-        <About />
+            <>
+            <AddTodo addTodo = {addTodo} />
+            <Todos todos={todos} onDelete={onDelete}/>
+            </>
+        }/>
+      <Route path='/about-me/' element={<About title="Mytodo" />} />
 
-      <Footer />
+      </Routes>
+    
+      <Footer title="Mytodo" />
+      </Router>
     </div>
   );
 }
